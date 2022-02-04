@@ -29,9 +29,8 @@ public class Main {
 
 					// and check whether it contains any hint of comments
 					if (st.contains("/*")) is_commented = true;
-					if (is_commented) ++classe_CLOC;
+					if (is_commented || st.contains("//")) ++classe_CLOC;
 					if (st.contains("*/")) is_commented = false;
-					if (st.contains("//")) ++classe_CLOC;
 
 				}
 
@@ -93,7 +92,6 @@ public class Main {
 	public static void main(String[] path) throws Exception {
 
 		Object[] results;
-
 
 		if (path[0].contains(".java")) {
 
