@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Main {
@@ -74,7 +75,7 @@ public class Main {
 		}
 	}
 
-	public static Object[] countPackage(String path) throws Exception {
+	public static Object[][] countPackage(String path) throws Exception {
 
 		int paquet_LOC 	= 0;
 		int paquet_CLOC	= 0;
@@ -85,7 +86,7 @@ public class Main {
 
 		pathRecursion(path);
 		System.out.println(all_java_paths);
-		Object[] all_res = new Object[all_java_paths.size()];
+		Object[][] all_res = new Object[all_java_paths.size()][3];
 
 		for (int i = 0 ; i < all_java_paths.size(); i++) {
 			String st = all_java_paths.get(i);
@@ -111,9 +112,8 @@ public class Main {
 
 	public static void main(String[] path) throws Exception {
 
-		Object[] results;
-
 		if (path[0].contains(".java")) {
+			Object[] results;
 
 			System.out.println("Single Java File.");
 
@@ -127,21 +127,20 @@ public class Main {
 			System.out.println("classe_CLOC : " + classe_CLOC);
 			System.out.println("classe_DC : " + classe_DC);
 
-
 		} else {
-
+			Object[][] results;
 			System.out.println("Looks like a package.");
 
 			results = countPackage(path[0]);
-
-			for( res : results) {
-				int package_LOC = (int)res[0];
-				int package_CLOC = (int)res[1];
-				double package_DC = (double)res[2];
+			for (int i = 0 ; i < results.length; i++) {
+				int package_LOC = (int) results[i][0];
+				int package_CLOC = (int) results[i][1];
+				double package_DC = (double) results[i][2];
 				System.out.println("paquet_LOC : " + package_LOC);
 				System.out.println("paquet_CLOC : " + package_CLOC);
 				System.out.println("paquet_DC : " + package_DC);
 			}
+
 
 		}
 
