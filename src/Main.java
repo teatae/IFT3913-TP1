@@ -36,6 +36,7 @@ public class Main {
 
         int classe_LOC = 0;
         int classe_CLOC = 0;
+        int WMC = 0;
         boolean is_commented = false;
 
         if (class_path.contains(".java")) {
@@ -54,6 +55,13 @@ public class Main {
                     if (is_commented || st.contains("//")) ++classe_CLOC;
                     if (st.contains("*/")) is_commented = false;
 
+                    if (st.contains("public")) {             // Is a method
+                        ++WMC;
+                    }
+                    if (st.contains("if") && !is_commented) ++WMC;
+                    if (st.contains("while") && !is_commented) ++WMC;
+                    if (st.contains("case") && !is_commented) ++WMC;
+
                 }
             }
         }
@@ -61,12 +69,14 @@ public class Main {
         double classe_DC = (double) classe_CLOC/ classe_LOC;
 
         // res[0] is for classe_LOC and res[1] is for classe_CLOC.
-        Object[] res = new Object[4];
+        Object[] res = new Object[6];
 
         res[0] = classe_LOC;
         res[1] = classe_CLOC;
         res[2] = classe_DC;
         res[3] = class_path;
+        res[4] = WMC;
+        res[5] = classe_DC/WMC;
 
         return res;
     }
@@ -108,7 +118,7 @@ public class Main {
         package_paths.clear();
         getPackagePathsRecursion(main_package_path); // Get package paths within main_package_path
 
-        Object[][] package_paths_info = new Object[package_paths.size() + 1][4]; // Results for each package
+        Object[][] package_paths_info = new Object[package_paths.size() + 1][6]; // Results for each package
 
         for (int i = 0; i < package_paths_info.length - 1; i++) {                // We do a countLine for each package
             String current_package = package_paths.get(i);
@@ -118,20 +128,25 @@ public class Main {
 
             int package_LOC = 0;
             int package_CLOC = 0;
+            int WCP = 0;
 
             for (String current_class : class_paths) {
                 if (current_class.contains(".java")) {
                     Object[] result = countLine(current_class);
                     package_LOC += (int) result[0];
                     package_CLOC += (int) result[1];
+                    WCP += (int) result[4];
                 }
             }
             double package_DC = (double) package_CLOC / package_LOC;
+            double package_BC = package_DC / WCP;
 
             package_paths_info[i][0] = package_LOC;
             package_paths_info[i][1] = package_CLOC;
             package_paths_info[i][2] = package_DC;
             package_paths_info[i][3] = current_package;
+            package_paths_info[i][4] = WCP;
+            package_paths_info[i][5] = package_BC;
         }
 
         class_paths.clear();
@@ -141,20 +156,25 @@ public class Main {
 
         int package_LOC = 0;
         int package_CLOC = 0;
+        int WCP = 0;
 
         for (String current_class : class_paths) {
             if (current_class.contains(".java")) {
                 Object[] result = countLine(current_class);
                 package_LOC += (int) result[0];
                 package_CLOC += (int) result[1];
+                WCP += (int) result[4];
             }
         }
         double package_DC = (double) package_CLOC / package_LOC;
+        double package_BC = package_DC / WCP;
 
         package_paths_info[package_paths_info.length-1][0] = package_LOC;
         package_paths_info[package_paths_info.length-1][1] = package_CLOC;
         package_paths_info[package_paths_info.length-1][2] = package_DC;
         package_paths_info[package_paths_info.length-1][3] = main_package_path;
+        package_paths_info[package_paths_info.length-1][4] = WCP;
+        package_paths_info[package_paths_info.length-1][5] = package_BC;
 
         return package_paths_info;
     }
@@ -164,7 +184,7 @@ public class Main {
         class_paths.clear();
         getJavaPathsRecursion(package_path);
 
-        Object[][] class_paths_info = new Object[class_paths.size()][4];
+        Object[][] class_paths_info = new Object[class_paths.size()][6];
 
         for (int i = 0; i < class_paths.size(); i++) {
             String current_class = class_paths.get(i);
@@ -180,8 +200,8 @@ public class Main {
 
     public void writeFile(Object[][] class_paths_info, Object[][] package_paths_info) throws IOException {
         Writer writer = null;
-        String class_header = "chemin, class, classe_LOC, classe_CLOC, classe_DC" + System.lineSeparator();
-        String package_header = "chemin, paquet, paquet_LOC, paquet_CLOC, paquet_DC" + System.lineSeparator();
+        String class_header = "chemin, class, classe_LOC, classe_CLOC, classe_DC, WMC, classe_BC" + System.lineSeparator();
+        String package_header = "chemin, paquet, paquet_LOC, paquet_CLOC, paquet_DC, WCP, paquet_BC" + System.lineSeparator();
 
         try {
             if (class_paths_info.length>0) {
@@ -193,7 +213,8 @@ public class Main {
                 for (Object[] result : class_paths_info) { // writes into classes.csv all java class info
                     writer.write(result[3] + ",");
                     writer.write((result[3]).toString().substring((result[3]).toString().lastIndexOf('\\') + 1));
-                    writer.write("," + result[0] + "," + result[1] + "," + result[2] + System.lineSeparator());
+                    writer.write("," + result[0] + "," + result[1] + "," + result[2] + "," + result[4]);
+                    writer.write("," + result[5] + System.lineSeparator());
                 }
             }
         } catch (IOException e) {
@@ -212,7 +233,8 @@ public class Main {
                 for (Object[] result : package_paths_info) { // writes into classes.csv all java class info
                     writer.write(result[3] + ",");
                     writer.write((result[3]).toString().substring((result[3]).toString().lastIndexOf('\\') + 1));
-                    writer.write("," + result[0] + "," + result[1] + "," + result[2] + System.lineSeparator());
+                    writer.write("," + result[0] + "," + result[1] + "," + result[2] + "," + result[4]);
+                    writer.write("," + result[5] + System.lineSeparator());
                 }
             }
         } catch (IOException e) {
