@@ -18,11 +18,6 @@ public class Main {
             System.out.println("Single Java File.");
 
             Object[] class_info = countLine(path);
-
-            System.out.println("classe_LOC : " + class_info[0]);
-            System.out.println("classe_CLOC : " + class_info[1]);
-            System.out.println("classe_DC : " + class_info[2]);
-
             class_paths_info = new Object[1][];
             class_paths_info[0] = class_info;                  // Only one java class info because path is one class
 
@@ -33,25 +28,18 @@ public class Main {
             package_paths_info = countPackage(path);           // Contains all package info within a path
             class_paths_info = countClass(path);               // Contains all java class info within a path
 
-            for (Object[] class_info : package_paths_info) {
-                System.out.println("paquet_LOC : " + class_info[0]);
-                System.out.println("paquet_CLOC : " + class_info[1]);
-                System.out.println("paquet_DC : " + class_info[2]);
-                System.out.println("path : " + class_info[3]);
-            }
-
             writeFile(class_paths_info,package_paths_info);
         }
     }
 
-    public static Object[] countLine(String classe_path) throws Exception {
+    public static Object[] countLine(String class_path) throws Exception {
 
         int classe_LOC = 0;
         int classe_CLOC = 0;
         boolean is_commented = false;
 
-        if (classe_path.contains(".java")) {
-            File file = new File(classe_path);
+        if (class_path.contains(".java")) {
+            File file = new File(class_path);
             BufferedReader br = new BufferedReader(new FileReader(file));
             String st;
 
@@ -78,7 +66,7 @@ public class Main {
         res[0] = classe_LOC;
         res[1] = classe_CLOC;
         res[2] = classe_DC;
-        res[3] = classe_path;
+        res[3] = class_path;
 
         return res;
     }
@@ -116,14 +104,13 @@ public class Main {
         }
     }
 
-    public static Object[][] countPackage(String package_path) throws Exception {
+    public static Object[][] countPackage(String main_package_path) throws Exception {
         package_paths.clear();
-        getPackagePathsRecursion(package_path);
-        System.out.println(package_paths);
+        getPackagePathsRecursion(main_package_path); // Get package paths within main_package_path
 
-        Object[][] package_paths_info = new Object[package_paths.size() + 1][4];
+        Object[][] package_paths_info = new Object[package_paths.size() + 1][4]; // Results for each package
 
-        for (int i = 0; i < package_paths_info.length - 1; i++) {
+        for (int i = 0; i < package_paths_info.length - 1; i++) {                // We do a countLine for each package
             String current_package = package_paths.get(i);
             class_paths.clear();
             getJavaPathsRecursion(current_package);
@@ -148,8 +135,9 @@ public class Main {
         }
 
         class_paths.clear();
-        getJavaPathsRecursion(package_path);
-        System.out.println("Java paths in main package " + package_path + " are " + class_paths);
+        // Get java paths within main_package_path so we can do a final countLine
+        getJavaPathsRecursion(main_package_path);
+        System.out.println("Java paths in main package " + main_package_path + " are " + class_paths);
 
         int package_LOC = 0;
         int package_CLOC = 0;
@@ -166,15 +154,15 @@ public class Main {
         package_paths_info[package_paths_info.length-1][0] = package_LOC;
         package_paths_info[package_paths_info.length-1][1] = package_CLOC;
         package_paths_info[package_paths_info.length-1][2] = package_DC;
-        package_paths_info[package_paths_info.length-1][3] = package_path;
+        package_paths_info[package_paths_info.length-1][3] = main_package_path;
 
         return package_paths_info;
     }
 
     public static Object[][] countClass(String package_path) throws Exception {
+        // Get java paths within package_path and returns their info
         class_paths.clear();
         getJavaPathsRecursion(package_path);
-        System.out.println(class_paths);
 
         Object[][] class_paths_info = new Object[class_paths.size()][4];
 
