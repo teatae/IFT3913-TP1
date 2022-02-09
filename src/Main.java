@@ -3,6 +3,7 @@ import com.sun.tools.jconsole.JConsoleContext;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public String path;                                        // First argument (args[0]) is the path
@@ -11,8 +12,10 @@ public class Main {
     static Object[][] class_paths_info;                        // Class info of class paths
     static Object[][] package_paths_info;                      // Package info of package paths
 
-    public Main (String[] args) throws Exception {
-        this.path = args[0];
+    public Main (String args) throws Exception {
+
+        this.path = args;
+
 
         if (path.contains(".java")) {
             System.out.println("Single Java File.");
@@ -254,6 +257,17 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        Main hi = new Main(args);
+    	String path;
+    	if(args.length != 0)
+    		path = args[0];
+    	else {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Type a path :");
+		path = sc.next();
+		sc.close();
+    	}
+    	
+        Main hi = new Main(path);
+    	
     }
 }
