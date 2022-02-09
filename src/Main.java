@@ -39,8 +39,9 @@ public class Main {
 
     	
     	File file =  new File(path);
-    	
+
     	return file.isDirectory();
+
     }
 
     public static Object[] countLine(String class_path) throws Exception {
@@ -242,6 +243,7 @@ public class Main {
                 writer = new BufferedWriter(outputWriter);
                 writer.write(package_header);
                 for (Object[] result : package_paths_info) { // writes into classes.csv all java class info
+                	if((int)result[0] == 0) continue;
                     writer.write(result[3] + ",");
                     writer.write((result[3]).toString().substring((result[3]).toString().lastIndexOf('\\') + 1));
                     writer.write("," + result[0] + "," + result[1] + "," + result[2] + "," + result[4]);
