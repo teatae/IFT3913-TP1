@@ -22,7 +22,7 @@ public class Main {
             class_paths_info[0] = class_info;                  // Only one java class info because path is one class
 
             writeFile(class_paths_info, new Object[1][1]);
-        } else {
+        } else if(isDirectory(path)) {
             System.out.println("Looks like a package.");
 
             package_paths_info = countPackage(path);           // Contains all package info within a path
@@ -30,6 +30,14 @@ public class Main {
 
             writeFile(class_paths_info,package_paths_info);
         }
+    }
+    
+    public static boolean isDirectory(String path) {
+
+    	
+    	File file =  new File(path);
+    	
+    	return file.isDirectory();
     }
 
     public static Object[] countLine(String class_path) throws Exception {
@@ -89,7 +97,7 @@ public class Main {
 
             for (String st : f_lists) {
 
-                if (!st.contains(".java")) {
+                if (isDirectory(package_path + "\\" + st)) {
                     package_paths.add(package_path + "\\" + st);
                     getPackagePathsRecursion(package_path + "\\" + st);
                 }
@@ -107,7 +115,7 @@ public class Main {
 
                 if (st.contains(".java")) {
                     class_paths.add(package_path + "\\" + st);
-                } else {
+                } else  {
                     getJavaPathsRecursion(package_path + "\\" + st);
                 }
             }
