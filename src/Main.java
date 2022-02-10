@@ -1,21 +1,26 @@
-import com.sun.tools.jconsole.JConsoleContext;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ *
+ */
 public class Main {
-    public String path;                                        // First argument (args[0]) is the path
     static List<String> class_paths = new ArrayList<>();       // Contains all java classes paths within a path
     static List<String> package_paths = new ArrayList<>();     // Contains all package paths within a path
     static Object[][] class_paths_info;                        // Class info of class paths
     static Object[][] package_paths_info;                      // Package info of package paths
+    public String path;                                        // First argument (args[0]) is the path
 
-    public Main (String args) throws Exception {
+    /**
+     * Constructor
+     * @param args the main path
+     * @throws Exception
+     */
+    public Main(String args) throws Exception {
 
         this.path = args;
-
 
         if (path.contains(".java")) {
             System.out.println("Single Java File.");
@@ -25,25 +30,38 @@ public class Main {
             class_paths_info[0] = class_info;                  // Only one java class info because path is one class
 
             writeFile(class_paths_info, new Object[1][1]);
-        } else if(isDirectory(path)) {
+        } else if (isDirectory(path)) {
             System.out.println("Looks like a package.");
 
             package_paths_info = countPackage(path);           // Contains all package info within a path
             class_paths_info = countClass(path);               // Contains all java class info within a path
 
-            writeFile(class_paths_info,package_paths_info);
+            writeFile(class_paths_info, package_paths_info);
         }
     }
-    
+
+    /**
+     *
+     * @param path path string to verify
+     * @return true if path is a directory
+     */
     public static boolean isDirectory(String path) {
-
-    	
-    	File file =  new File(path);
-
-    	return file.isDirectory();
-
+        File file = new File(path);
+        return file.isDirectory();
     }
 
+    /**
+     *
+     * @param class_path the java class path
+     * @return Object[] res
+     * containing java class information such as
+     * res[1] = classe_CLOC;
+     * res[2] = classe_DC;
+     * res[3] = class_path;
+     * res[4] = WMC;
+     * res[5] = classe_DC / WMC;
+     * @throws Exception
+     */
     public static Object[] countLine(String class_path) throws Exception {
 
         int classe_LOC = 0;
@@ -78,7 +96,7 @@ public class Main {
             }
         }
 
-        double classe_DC = (double) classe_CLOC/ classe_LOC;
+        double classe_DC = (double) classe_CLOC / classe_LOC;
 
         // res[0] is for classe_LOC and res[1] is for classe_CLOC.
         Object[] res = new Object[6];
@@ -88,11 +106,15 @@ public class Main {
         res[2] = classe_DC;
         res[3] = class_path;
         res[4] = WMC;
-        res[5] = classe_DC/WMC;
+        res[5] = classe_DC / WMC;
 
         return res;
     }
 
+    /**
+     * updates package_paths with all package paths within a path
+     * @param package_path path of a package
+     */
     public static void getPackagePathsRecursion(String package_path) {
         File file = new File(package_path);
         String[] f_lists = file.list();
@@ -109,6 +131,10 @@ public class Main {
         }
     }
 
+    /**
+     * updates class_paths with all java classes paths within a path
+     * @param package_path path of a package
+     */
     public static void getJavaPathsRecursion(String package_path) {
         File file = new File(package_path);
         String[] f_lists = file.list();
@@ -119,13 +145,20 @@ public class Main {
 
                 if (st.contains(".java")) {
                     class_paths.add(package_path + "\\" + st);
-                } else  {
+                } else {
                     getJavaPathsRecursion(package_path + "\\" + st);
                 }
             }
         }
     }
 
+    /**
+     *
+     * @param main_package_path the initial path from main
+     * @return Object[][] package_paths_info
+     * Object of all package info
+     * @throws Exception
+     */
     public static Object[][] countPackage(String main_package_path) throws Exception {
         package_paths.clear();
         getPackagePathsRecursion(main_package_path); // Get package paths within main_package_path
@@ -162,7 +195,7 @@ public class Main {
         }
 
         class_paths.clear();
-        // Get java paths within main_package_path so we can do a final countLine
+        // Get java paths within main_package_path, so we can do a final countLine
         getJavaPathsRecursion(main_package_path);
         System.out.println("Java paths in main package " + main_package_path + " are " + class_paths);
 
@@ -181,20 +214,27 @@ public class Main {
         double package_DC = (double) package_CLOC / package_LOC;
         double package_BC = package_DC / WCP;
 
-        package_paths_info[package_paths_info.length-1][0] = package_LOC;
-        package_paths_info[package_paths_info.length-1][1] = package_CLOC;
-        package_paths_info[package_paths_info.length-1][2] = package_DC;
-        package_paths_info[package_paths_info.length-1][3] = main_package_path;
-        package_paths_info[package_paths_info.length-1][4] = WCP;
-        package_paths_info[package_paths_info.length-1][5] = package_BC;
+        package_paths_info[package_paths_info.length - 1][0] = package_LOC;
+        package_paths_info[package_paths_info.length - 1][1] = package_CLOC;
+        package_paths_info[package_paths_info.length - 1][2] = package_DC;
+        package_paths_info[package_paths_info.length - 1][3] = main_package_path;
+        package_paths_info[package_paths_info.length - 1][4] = WCP;
+        package_paths_info[package_paths_info.length - 1][5] = package_BC;
 
         return package_paths_info;
     }
 
-    public static Object[][] countClass(String package_path) throws Exception {
+    /**
+     *
+     * @param main_package_path the initial path from main
+     * @return Object[][] class_paths_info
+     * Object of all java class info
+     * @throws Exception
+     */
+    public static Object[][] countClass(String main_package_path) throws Exception {
         // Get java paths within package_path and returns their info
         class_paths.clear();
-        getJavaPathsRecursion(package_path);
+        getJavaPathsRecursion(main_package_path);
 
         Object[][] class_paths_info = new Object[class_paths.size()][6];
 
@@ -210,13 +250,19 @@ public class Main {
     }
 
 
+    /**
+     * writes classes.csv and paquets.csv with
+     * @param class_paths_info Object of all java class info
+     * @param package_paths_info Object of all package info
+     * @throws IOException
+     */
     public void writeFile(Object[][] class_paths_info, Object[][] package_paths_info) throws IOException {
         Writer writer = null;
         String class_header = "chemin, class, classe_LOC, classe_CLOC, classe_DC, WMC, classe_BC" + System.lineSeparator();
         String package_header = "chemin, paquet, paquet_LOC, paquet_CLOC, paquet_DC, WCP, paquet_BC" + System.lineSeparator();
 
         try {
-            if (class_paths_info.length>0) {
+            if (class_paths_info.length > 0) {
                 FileOutputStream outputStream = new FileOutputStream("classes.csv");
                 OutputStreamWriter outputWriter = new OutputStreamWriter(outputStream);
                 writer = new BufferedWriter(outputWriter);
@@ -238,12 +284,12 @@ public class Main {
         writer = null;
         try {
             if (package_paths_info[0] != null) {
-                FileOutputStream outputStream = new FileOutputStream("package.csv");
+                FileOutputStream outputStream = new FileOutputStream("paquets.csv");
                 OutputStreamWriter outputWriter = new OutputStreamWriter(outputStream);
                 writer = new BufferedWriter(outputWriter);
                 writer.write(package_header);
                 for (Object[] result : package_paths_info) { // writes into classes.csv all java class info
-                	if((int)result[0] == 0) continue;
+                    if ((int) result[0] == 0) continue;
                     writer.write(result[3] + ",");
                     writer.write((result[3]).toString().substring((result[3]).toString().lastIndexOf('\\') + 1));
                     writer.write("," + result[0] + "," + result[1] + "," + result[2] + "," + result[4]);
@@ -258,18 +304,23 @@ public class Main {
         writer.close();
     }
 
+    /**
+     *
+     * @param args the main path, can be .java or package
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
-    	String path;
-    	if(args.length != 0)
-    		path = args[0];
-    	else {
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Type a path :");
-		path = sc.next();
-		sc.close();
-    	}
-    	
-        Main hi = new Main(path);
-    	
+        String path;
+        if (args.length != 0)
+            path = args[0];
+        else {
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Type a path :");
+            path = sc.next();
+            sc.close();
+        }
+
+        new Main(path);
+
     }
 }
