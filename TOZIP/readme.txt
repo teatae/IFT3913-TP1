@@ -1,6 +1,13 @@
-in terminal move to directory that contains both the jar and the jfreechart folder
-java -jar "IFT3913-TP1.jar" "jfreechart"
+Tae-Suzanne Ly
+Changmin Lee
 
-otherwise move to directory that contains the jar
+https://github.com/teatae/IFT3913-TP1
+
+Changer le chemin pour que le répertoire courant soit celui contenant le fichier jar
+
+Exécuter le jar:
+java -jar "IFT3913-TP1.jar" "Chemin du répertoire jfreechart"
+
+Autre façon d'exécuter le jar:
 java -jar "IFT3913-TP1.jar"
-and then type path of jfreechart folder
+Ensuite entrer la chemin complet du répertoire jfreechart
