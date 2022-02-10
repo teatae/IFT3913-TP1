@@ -1,2 +1,12 @@
-À partir de vos observations, identifiez les 3 classes et les 3 paquets les moins bien commentées et
-proposez des améliorations. Décrivez votre solution dans un fichier de texte (voir précisions globales plus bas).
+À partir de vos observations identifiez les 3 classes et les 3 paquets les moins bien commentées et
+proposez des améliorations.
+
+chemin, paquet, paquet_LOC, paquet_CLOC, paquet_DC, WCP, paquet_BC
+jfreechart\src\main\java\org\jfree\chart\plot\dial,dial,5544,3082,0.5559163059163059,508,0.001094323436843122
+jfreechart\src\main\java\org\jfree\data\statistics,statistics,5745,3122,0.5434290687554395,487,0.0011158707777319085
+jfreechart\src\main\java\org\jfree\chart\annotations,annotations,5642,2906,0.5150655795817086,458,0.0011245973353312415
+
+chemin, class, classe_LOC, classe_CLOC, classe_DC, WMC, classe_BC
+jfreechart\src\main\java\org\jfree\chart\swing\ChartPanel.java,ChartPanel.java,2750,1190,0.43272727272727274,360,0.001202020202020202,
+jfreechart\src\main\java\org\jfree\data\general\DatasetUtils.java,DatasetUtils.java,2326,872,0.3748925193465176,255,0.0014701667425353632,
+jfreechart\src\main\java\org\jfree\chart\renderer\AbstractRenderer.java,AbstractRenderer.java,2774,1539,0.5547945205479452,347,0.0015988314713197267
