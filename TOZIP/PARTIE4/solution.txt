@@ -1,0 +1,2 @@
+À partir de vos observations, identifiez les 3 classes et les 3 paquets les moins bien commentées et
+proposez des améliorations. Décrivez votre solution dans un fichier de texte (voir précisions globales plus bas).

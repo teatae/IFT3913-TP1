@@ -258,8 +258,8 @@ public class Main {
      */
     public void writeFile(Object[][] class_paths_info, Object[][] package_paths_info) throws IOException {
         Writer writer = null;
-        String class_header = "chemin, class, classe_LOC, classe_CLOC, classe_DC, WMC, classe_BC" + System.lineSeparator();
-        String package_header = "chemin, paquet, paquet_LOC, paquet_CLOC, paquet_DC, WCP, paquet_BC" + System.lineSeparator();
+        String class_header = "'chemin', 'class', 'classe_LOC', 'classe_CLOC', 'classe_DC', 'WMC', 'classe_BC'" + System.lineSeparator();
+        String package_header = "'chemin', 'paquet', 'paquet_LOC', 'paquet_CLOC', 'paquet_DC', 'WCP', 'paquet_BC'" + System.lineSeparator();
 
         try {
             if (class_paths_info.length > 0) {
@@ -269,10 +269,10 @@ public class Main {
                 writer.write(class_header);
 
                 for (Object[] result : class_paths_info) { // writes into classes.csv all java class info
-                    writer.write(result[3] + ",");
+                    writer.write("'" + result[3] + "','");
                     writer.write((result[3]).toString().substring((result[3]).toString().lastIndexOf('\\') + 1));
-                    writer.write("," + result[0] + "," + result[1] + "," + result[2] + "," + result[4]);
-                    writer.write("," + result[5] + System.lineSeparator());
+                    writer.write("','" + result[0] + "','" + result[1] + "','" + result[2] + "','" + result[4]);
+                    writer.write("','" + result[5] + "'" + System.lineSeparator());
                 }
             }
         } catch (IOException e) {
@@ -290,10 +290,10 @@ public class Main {
                 writer.write(package_header);
                 for (Object[] result : package_paths_info) { // writes into classes.csv all java class info
                     if ((int) result[0] == 0) continue;
-                    writer.write(result[3] + ",");
+                    writer.write("'" + result[3] + "','");
                     writer.write((result[3]).toString().substring((result[3]).toString().lastIndexOf('\\') + 1));
-                    writer.write("," + result[0] + "," + result[1] + "," + result[2] + "," + result[4]);
-                    writer.write("," + result[5] + System.lineSeparator());
+                    writer.write("','" + result[0] + "','" + result[1] + "','" + result[2] + "','" + result[4]);
+                    writer.write("','" + result[5] + "'" + System.lineSeparator());
                 }
             }
         } catch (IOException e) {
