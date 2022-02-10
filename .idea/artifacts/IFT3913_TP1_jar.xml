@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="IFT3913-TP1:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/IFT3913_TP1_jar</output-path>
+    <root id="archive" name="IFT3913-TP1.jar">
+      <element id="module-output" name="IFT3913-TP1" />
+    </root>
+  </artifact>
+</component>

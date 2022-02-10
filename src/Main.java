@@ -169,7 +169,7 @@ public class Main {
             String current_package = package_paths.get(i);
             class_paths.clear();
             getJavaPathsRecursion(current_package);
-            System.out.println("Java paths in package " + current_package + " are " + class_paths);
+            //System.out.println("Java paths in package " + current_package + " are " + class_paths);
 
             int package_LOC = 0;
             int package_CLOC = 0;
@@ -197,7 +197,7 @@ public class Main {
         class_paths.clear();
         // Get java paths within main_package_path, so we can do a final countLine
         getJavaPathsRecursion(main_package_path);
-        System.out.println("Java paths in main package " + main_package_path + " are " + class_paths);
+        //System.out.println("Java paths in main package " + main_package_path + " are " + class_paths);
 
         int package_LOC = 0;
         int package_CLOC = 0;
