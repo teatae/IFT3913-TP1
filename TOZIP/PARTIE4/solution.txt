@@ -1,12 +1,19 @@
-À partir de vos observations identifiez les 3 classes et les 3 paquets les moins bien commentées et
-proposez des améliorations.
-
+Voici les 3 paquets les moins bien commentées:
 chemin, paquet, paquet_LOC, paquet_CLOC, paquet_DC, WCP, paquet_BC
-jfreechart\src\main\java\org\jfree\chart\plot\dial,dial,5544,3082,0.5559163059163059,508,0.001094323436843122
-jfreechart\src\main\java\org\jfree\data\statistics,statistics,5745,3122,0.5434290687554395,487,0.0011158707777319085
-jfreechart\src\main\java\org\jfree\chart\annotations,annotations,5642,2906,0.5150655795817086,458,0.0011245973353312415
+jfreechart\src\main\java\org\jfree\chart\plot,jfreechart.src.main.java.org.jfree.chart.plot,25028,12156,0.485696,2636,0.000184,
+jfreechart\src\main\java\org\jfree\chart\axis,jfreechart.src.main.java.org.jfree.chart.axis,17608,8353,0.474387,1714,0.000277,
+jfreechart\src\main\java\org\jfree\chart\renderer\xy,jfreechart.src.main.java.org.jfree.chart.renderer.xy,18269,8646,0.473261,1675,0.000283,
 
+Améliorations à apporter:
+
+
+
+Voici les 3 classes les moins bien commentées:
 chemin, class, classe_LOC, classe_CLOC, classe_DC, WMC, classe_BC
-jfreechart\src\main\java\org\jfree\chart\swing\ChartPanel.java,ChartPanel.java,2750,1190,0.43272727272727274,360,0.001202020202020202,
-jfreechart\src\main\java\org\jfree\data\general\DatasetUtils.java,DatasetUtils.java,2326,872,0.3748925193465176,255,0.0014701667425353632,
-jfreechart\src\main\java\org\jfree\chart\renderer\AbstractRenderer.java,AbstractRenderer.java,2774,1539,0.5547945205479452,347,0.0015988314713197267
+jfreechart\src\main\java\org\jfree\chart\plot\XYPlot.java,XYPlot.java,4981,2259,0.453523,577,0.000786,
+jfreechart\src\main\java\org\jfree\chart\plot\CategoryPlot.java,CategoryPlot.java,4523,2110,0.466505,519,0.000899,
+jfreechart\src\main\java\org\jfree\chart\swing\ChartPanel.java,ChartPanel.java,2750,1190,0.432727,360,0.001202,
+
+Améliorations à apporter:
+
+
