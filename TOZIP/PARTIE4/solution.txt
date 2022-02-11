@@ -4,10 +4,6 @@ jfreechart\src\main\java\org\jfree\chart\plot,jfreechart.src.main.java.org.jfree
 jfreechart\src\main\java\org\jfree\chart\axis,jfreechart.src.main.java.org.jfree.chart.axis,17608,8353,0.474387,1714,0.000277,
 jfreechart\src\main\java\org\jfree\chart\renderer\xy,jfreechart.src.main.java.org.jfree.chart.renderer.xy,18269,8646,0.473261,1675,0.000283,
 
-Améliorations à apporter:
-
-
-
 Voici les 3 classes les moins bien commentées:
 chemin, class, classe_LOC, classe_CLOC, classe_DC, WMC, classe_BC
 jfreechart\src\main\java\org\jfree\chart\plot\XYPlot.java,XYPlot.java,4981,2259,0.453523,577,0.000786,
@@ -15,5 +11,8 @@ jfreechart\src\main\java\org\jfree\chart\plot\CategoryPlot.java,CategoryPlot.jav
 jfreechart\src\main\java\org\jfree\chart\swing\ChartPanel.java,ChartPanel.java,2750,1190,0.432727,360,0.001202,
 
 Améliorations à apporter:
+Moins de méthodes par classe
+Moins de classes par paquet
+Des classes plus petites permet de réduire le nombre d'importations
 
 
