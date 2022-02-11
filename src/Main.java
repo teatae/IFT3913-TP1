@@ -1,4 +1,5 @@
 import java.io.*;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -189,6 +190,25 @@ public class Main {
             }
         }
     }
+
+    /**
+     * updates class_paths with all java classes paths within a path (no recursion/subfolders)
+     * @param package_path path of a package
+     */
+    public static void getJavaPaths(String package_path) {
+        File file = new File(package_path);
+        String[] f_lists = file.list();
+
+        if (f_lists != null) {
+
+            for (String st : f_lists) {
+
+                if (isJavaFile(st)) {
+                    class_paths.add(package_path + "\\" + st);
+                }
+            }
+        }
+    }
     
     public String relativePath(String str) {
     	
@@ -225,7 +245,7 @@ public class Main {
         for (int i = 0; i < package_paths_info.length - 1; i++) {                // We do a countLine for each package
             String current_package = package_paths.get(i);
             class_paths.clear();
-            getJavaPathsRecursion(current_package);
+            getJavaPaths(current_package);
             //System.out.println("Java paths in package " + current_package + " are " + class_paths);
 
             int package_LOC = 0;
@@ -253,7 +273,7 @@ public class Main {
 
         class_paths.clear();
         // Get java paths within main_package_path, so we can do a final countLine
-        getJavaPathsRecursion(main_package_path);
+        getJavaPaths(main_package_path);
         //System.out.println("Java paths in main package " + main_package_path + " are " + class_paths);
 
         int package_LOC = 0;
@@ -328,8 +348,8 @@ public class Main {
                 for (Object[] result : class_paths_info) { // writes into classes.csv all java class info
                     writer.write(relativePath((String)result[3]) + ",");
                     writer.write((result[3]).toString().substring((result[3]).toString().lastIndexOf('\\') + 1));
-                    writer.write("," + result[0] + "," + result[1] + "," + result[2] + "," + result[4]);
-                    writer.write("," + result[5] + System.lineSeparator());
+                    writer.write("," + result[0] + "," + result[1] + "," + new DecimalFormat("#.######").format(result[2]) + "," + result[4]);
+                    writer.write("," + new DecimalFormat("#.######").format(result[5]) + System.lineSeparator());
                 }
             }
         } catch (IOException e) {
@@ -349,8 +369,8 @@ public class Main {
                 	if((int)result[0] == 0) continue;
                     writer.write(this.relativePath((String)result[3]) + ",");
                     writer.write(packageNameMake((String)result[3]));
-                    writer.write("," + result[0] + "," + result[1] + "," + result[2] + "," + result[4]);
-                    writer.write("," + result[5] + System.lineSeparator());
+                    writer.write("," + result[0] + "," + result[1] + "," + new DecimalFormat("#.######").format(result[2]) + "," + result[4]);
+                    writer.write("," + new DecimalFormat("#.######").format(result[5]) + System.lineSeparator());
                 }
             }
         } catch (IOException e) {
