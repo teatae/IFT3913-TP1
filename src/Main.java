@@ -17,7 +17,7 @@ public class Main {
         this.path = args;
 
 
-        if (path.contains(".java")) {
+        if (isJavaFile(path)) {
             System.out.println("Single Java File.");
 
             Object[] class_info = countLine(path);
@@ -26,7 +26,7 @@ public class Main {
 
             writeFile(class_paths_info, new Object[1][1]);
         } else if(isDirectory(path)) {
-            System.out.println("Looks like a package.");
+            System.out.println("Looks like a directory.");
 
             package_paths_info = countPackage(path);           // Contains all package info within a path
             class_paths_info = countClass(path);               // Contains all java class info within a path
@@ -43,6 +43,39 @@ public class Main {
     	return file.isDirectory();
 
     }
+    
+    public static boolean isJavaFile(String path) {
+    	
+    	if(path.length()<5) return false; 
+    	return path.substring(path.length() - 5).equals(".java");
+    }
+    
+    public static boolean hasJavaFile(String path) {
+    	
+    	File file = new File(path);
+    	
+    	File[] flist =  file.listFiles(new FilenameFilter() {
+
+			@Override
+			public boolean accept(File dir, String name) {
+				// TODO Auto-generated method stub
+				if(!isDirectory(name)) {
+				if (isJavaFile(name)) return true;
+				}
+				return false;
+				
+			}
+			
+
+    	});
+    	
+    	for (File f : flist) {
+			String fileName = f.getName();
+			if(isJavaFile(fileName)) return true;
+		}
+		
+		return false;
+    }
 
     public static Object[] countLine(String class_path) throws Exception {
 
@@ -51,7 +84,7 @@ public class Main {
         int WMC = 0;
         boolean is_commented = false;
 
-        if (class_path.contains(".java")) {
+        if (isJavaFile(class_path)) {
             File file = new File(class_path);
             BufferedReader br = new BufferedReader(new FileReader(file));
             String st;
@@ -100,8 +133,12 @@ public class Main {
         if (f_lists != null) {
 
             for (String st : f_lists) {
+            	
+            	String path = package_path + "\\" + st;
 
-                if (isDirectory(package_path + "\\" + st)) {
+                if (isDirectory(path)) {
+                	
+                	if(hasJavaFile(path))
                     package_paths.add(package_path + "\\" + st);
                     getPackagePathsRecursion(package_path + "\\" + st);
                 }
@@ -117,13 +154,32 @@ public class Main {
 
             for (String st : f_lists) {
 
-                if (st.contains(".java")) {
+                if (isJavaFile(st)) {
                     class_paths.add(package_path + "\\" + st);
                 } else  {
                     getJavaPathsRecursion(package_path + "\\" + st);
                 }
             }
         }
+    }
+    
+    public String relativePath(String str) {
+    	
+    	File f = new File(path);
+    	
+    	String parent = f.getParent();
+	
+    	return str.substring(parent.length()+1);
+
+    }
+    
+    public String packageNameMake(String path) {
+    	
+    	String rPath = relativePath(path);
+    	String result = rPath.replace('\\', '.');
+    	return result;
+    	
+    	
     }
 
     public static Object[][] countPackage(String main_package_path) throws Exception {
@@ -143,7 +199,7 @@ public class Main {
             int WCP = 0;
 
             for (String current_class : class_paths) {
-                if (current_class.contains(".java")) {
+                if (current_class.substring(current_class.length() -5).equals(".java")) {
                     Object[] result = countLine(current_class);
                     package_LOC += (int) result[0];
                     package_CLOC += (int) result[1];
@@ -171,7 +227,7 @@ public class Main {
         int WCP = 0;
 
         for (String current_class : class_paths) {
-            if (current_class.contains(".java")) {
+            if (current_class.substring(current_class.length() -4).equals(".java")) {
                 Object[] result = countLine(current_class);
                 package_LOC += (int) result[0];
                 package_CLOC += (int) result[1];
@@ -201,7 +257,7 @@ public class Main {
         for (int i = 0; i < class_paths.size(); i++) {
             String current_class = class_paths.get(i);
 
-            if (current_class.contains(".java")) {
+            if (isJavaFile(current_class)) {
                 Object[] result = countLine(current_class);
                 class_paths_info[i] = result;
             }
@@ -223,7 +279,7 @@ public class Main {
                 writer.write(class_header);
 
                 for (Object[] result : class_paths_info) { // writes into classes.csv all java class info
-                    writer.write(result[3] + ",");
+                    writer.write(relativePath((String)result[3]) + ",");
                     writer.write((result[3]).toString().substring((result[3]).toString().lastIndexOf('\\') + 1));
                     writer.write("," + result[0] + "," + result[1] + "," + result[2] + "," + result[4]);
                     writer.write("," + result[5] + System.lineSeparator());
@@ -244,8 +300,8 @@ public class Main {
                 writer.write(package_header);
                 for (Object[] result : package_paths_info) { // writes into classes.csv all java class info
                 	if((int)result[0] == 0) continue;
-                    writer.write(result[3] + ",");
-                    writer.write((result[3]).toString().substring((result[3]).toString().lastIndexOf('\\') + 1));
+                    writer.write(this.relativePath((String)result[3]) + ",");
+                    writer.write(packageNameMake((String)result[3]));
                     writer.write("," + result[0] + "," + result[1] + "," + result[2] + "," + result[4]);
                     writer.write("," + result[5] + System.lineSeparator());
                 }
